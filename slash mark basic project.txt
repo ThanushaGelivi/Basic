@@ -1,0 +1,35 @@
+import paho.mqtt.client as mqtt
+import random
+import time
+
+# MQTT Broker
+broker_address = "mqtt.eclipse.org"
+broker_port = 1883
+
+# MQTT Topics
+air_quality_topic = "air_quality"
+
+# Create MQTT Client
+client = mqtt.Client("AirQualitySensor")
+
+# Connect to MQTT Broker
+client.connect(broker_address, broker_port)
+
+# Simulate Air Quality Data
+def simulate_air_quality_data():
+    while True:
+        # Simulate air quality data
+        pm25 = round(random.uniform(0, 100), 2)  # Simulate PM2.5 levels
+        pm10 = round(random.uniform(0, 100), 2)  # Simulate PM10 levels
+        no2 = round(random.uniform(0, 50), 2)    # Simulate NO2 levels
+        so2 = round(random.uniform(0, 20), 2)    # Simulate SO2 levels
+        co = round(random.uniform(0, 10), 2)     # Simulate CO levels
+        
+        # Publish air quality data to MQTT Broker
+        client.publish(air_quality_topic, f"PM2.5: {pm25}, PM10: {pm10}, NO2: {no2}, SO2: {so2}, CO: {co}")
+        
+        time.sleep(5)  # Publish data every 5 seconds
+
+# Start MQTT Client and simulate air quality data
+client.loop_start()
+simulate_air_quality_data()
